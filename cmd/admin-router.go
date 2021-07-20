@@ -83,8 +83,12 @@ func registerAdminRouter(router *mux.Router, enableConfigOps bool) {
 
 			adminRouter.Methods(http.MethodPost).Path(adminVersion + "/background-heal/status").HandlerFunc(gz(httpTraceAll(adminAPI.BackgroundHealStatusHandler)))
 
-			/// Health operations
-
+			/// Pool operations
+			adminRouter.Methods(http.MethodGet).Path(adminVersion + "/pools/list").HandlerFunc(gz(httpTraceAll(adminAPI.ListErasurePools)))
+			adminRouter.Methods(http.MethodPost).Path(adminVersion+"/pools/suspend").HandlerFunc(gz(httpTraceAll(adminAPI.SuspendErasurePool))).
+				Queries("pool", "{pool:.*}")
+			adminRouter.Methods(http.MethodPost).Path(adminVersion+"/pools/resume").HandlerFunc(gz(httpTraceAll(adminAPI.ResumeErasurePool))).
+				Queries("pool", "{pool:.*}")
 		}
 
 		// Profiling operations
